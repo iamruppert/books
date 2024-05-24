@@ -8,7 +8,7 @@ import lombok.*;
 @EqualsAndHashCode(of = "bookId")
 @ToString(of = {
         "bookId", "year", "title",
-        "publisher", "ISBN"
+        "publisher", "ISBN", "pages"
 })
 public class Book {
 
@@ -17,4 +17,5 @@ public class Book {
     String title;
     String publisher;
     String ISBN;
+    Integer pages;
 }

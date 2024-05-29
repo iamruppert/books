@@ -1,4 +1,4 @@
-package com.lukasz.stephen_king.domain;
+package com.lukasz.stephen_king.infrastructure.stephen_king;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

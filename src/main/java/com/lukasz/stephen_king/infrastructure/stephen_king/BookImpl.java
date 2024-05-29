@@ -1,7 +1,6 @@
 package com.lukasz.stephen_king.infrastructure.stephen_king;
 
 import com.lukasz.stephen_king.buisness.dao.BookDao;
-import com.lukasz.stephen_king.domain.Book;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

@@ -24,7 +24,7 @@ public class BookImpl implements BookDao {
                 .retrieve()
                 .bodyToMono(ApiResponse.class);
 
-        ApiResponse response = responseMono.block(); // Blocking for simplicity
+        ApiResponse response = responseMono.block();
         return response.getData();
     }
 

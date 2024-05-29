@@ -15,7 +15,7 @@ import lombok.*;
 public class Book {
 
     String bookId;
-    String year;
+    Integer year;
     String title;
     String publisher;
     String ISBN;
@@ -23,7 +23,7 @@ public class Book {
 
     @JsonCreator
     public Book(@JsonProperty("id") String bookId,
-                @JsonProperty("Year") String year,
+                @JsonProperty("Year") Integer year,
                 @JsonProperty("Title") String title,
                 @JsonProperty("Publisher") String publisher,
                 @JsonProperty("ISBN") String ISBN,

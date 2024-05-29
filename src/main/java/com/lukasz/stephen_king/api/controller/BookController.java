@@ -18,17 +18,26 @@ public class BookController {
 
     @CrossOrigin(origins = "*")
     @GetMapping("/getBooks")
-    public ResponseEntity<?> getBooks(){
+    public ResponseEntity<?> getAllBooks(
+            @RequestParam(defaultValue = "pages") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortOrder) {
+
         List<Book> books = bookService.getAllBooks();
+
+        books = bookService.sortBooks(books, sortBy, sortOrder);
+
         return ResponseEntity.ok().body(books);
     }
 
     @GetMapping("/search")
     public ResponseEntity<?> getFilteredBooks(
-            @PathParam("name") String name
+            @PathParam("name") String name,
+            @RequestParam(defaultValue = "pages") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortOrder
     ){
 
         List<Book> books = bookService.findBooks(name);
+        books = bookService.sortBooks(books, sortBy, sortOrder);
         return ResponseEntity.ok().body(books);
     }
 }

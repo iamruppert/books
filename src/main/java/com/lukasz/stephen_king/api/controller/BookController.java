@@ -1,7 +1,8 @@
 package com.lukasz.stephen_king.api.controller;
 
 import com.lukasz.stephen_king.buisness.BookService;
-import com.lukasz.stephen_king.domain.Book;
+import com.lukasz.stephen_king.domain.BookDomain;
+import com.lukasz.stephen_king.infrastructure.stephen_king.Book;
 import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class BookController {
             @RequestParam(defaultValue = "pages") String sortBy,
             @RequestParam(defaultValue = "asc") String sortOrder) {
 
-        List<Book> books = bookService.getAllBooks();
+        List<BookDomain> books = bookService.getAllBooks();
 
         books = bookService.sortBooks(books, sortBy, sortOrder);
 
@@ -36,7 +37,7 @@ public class BookController {
             @RequestParam(defaultValue = "asc") String sortOrder
     ){
 
-        List<Book> books = bookService.findBooks(name);
+        List<BookDomain> books = bookService.findBooks(name);
         books = bookService.sortBooks(books, sortBy, sortOrder);
         return ResponseEntity.ok().body(books);
     }

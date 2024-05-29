@@ -1,11 +1,11 @@
 package com.lukasz.stephen_king.buisness;
 
 import com.lukasz.stephen_king.buisness.dao.BookDao;
+import com.lukasz.stephen_king.domain.exception.NotFoundException;
 import com.lukasz.stephen_king.buisness.mapper.BookMapper;
 import com.lukasz.stephen_king.domain.BookDomain;
 import com.lukasz.stephen_king.infrastructure.stephen_king.Book;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +28,17 @@ public class BookService {
     public List<BookDomain> getAllBooks() {
         List<Book> allBooks = bookDao.getAllBooks();
         return fetchAndMapDescription(allBooks);
+    }
+
+    public BookDomain getBook(Integer id) {
+        Optional<Book> optionalBook = bookDao.getBook(id);
+        if (optionalBook.isPresent()) {
+            Book book = optionalBook.get();
+            return this.fetchAndMapDescription(List.of(book)).getFirst();
+        }
+        else{
+            throw new NotFoundException("Cannot find book with id: [%s]".formatted(id));
+        }
     }
 
     public List<BookDomain> findBooks(String name) {
@@ -60,12 +72,12 @@ public class BookService {
 
         return books.stream()
                 .map(bookMapper::map)
-                .peek(b->{
+                .peek(b -> {
                     String fileName = b.getTitle().toLowerCase()
-                            .replace(":","")
-                            .replace(".","")
-                            .replace("'","-")
-                            .replace("/","-")
+                            .replace(":", "")
+                            .replace(".", "")
+                            .replace("'", "-")
+                            .replace("/", "-")
                             .replace(" ", "-") + ".txt";
                     String description;
                     try {

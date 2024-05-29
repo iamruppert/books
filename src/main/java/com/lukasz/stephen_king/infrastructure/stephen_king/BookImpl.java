@@ -9,6 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @AllArgsConstructor
@@ -27,9 +28,29 @@ public class BookImpl implements BookDao {
         return response.getData();
     }
 
+    @Override
+    public Optional<Book> getBook(Integer id) {
+        try {
+            Mono<BookResponse> responseMono = webClient.get()
+                    .uri("/api/book/" + id)
+                    .retrieve()
+                    .bodyToMono(BookResponse.class);
+
+            BookResponse response = responseMono.block();
+            return Optional.ofNullable(response.getData());
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
     @Setter
     @Getter
     private static class ApiResponse {
         private List<Book> data;
     }
-}
+
+    @Setter
+    @Getter
+    private static class BookResponse {
+        private Book data;
+    }}

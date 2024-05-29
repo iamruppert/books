@@ -61,7 +61,12 @@ public class BookService {
         return books.stream()
                 .map(bookMapper::map)
                 .peek(b->{
-                    String fileName = b.getTitle().toLowerCase().replace(" ", "-") + ".txt";
+                    String fileName = b.getTitle().toLowerCase()
+                            .replace(":","")
+                            .replace(".","")
+                            .replace("'","-")
+                            .replace("/","-")
+                            .replace(" ", "-") + ".txt";
                     String description;
                     try {
                         description = readDescriptionFromFile(fileName);

@@ -10,9 +10,13 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -69,24 +73,28 @@ public class BookService {
 
 
     private List<BookDomain> fetchAndMapDescription(List<Book> books) {
-
         return books.stream()
                 .map(bookMapper::map)
                 .peek(b -> {
-                    String fileName = b.getTitle().toLowerCase()
+                    String fileNameBase = b.getTitle().toLowerCase()
                             .replace(":", "")
                             .replace(".", "")
                             .replace("'", "-")
                             .replace("/", "-")
-                            .replace(" ", "-") + ".txt";
+                            .replace(" ", "-");
+
+                    String descriptionFileName = fileNameBase + ".txt";
+                    String imageFileName = fileNameBase + ".jpg";
                     String description;
+                    Blob image;
                     try {
-                        description = readDescriptionFromFile(fileName);
-                    } catch (IOException e) {
+                        description = readDescriptionFromFile(descriptionFileName);
+                        image = readImageFromFile(imageFileName);
+                    } catch (IOException | SQLException e) {
                         throw new RuntimeException(e);
                     }
                     b.setDescription(description);
-
+                    b.setImage(image);
                 })
                 .collect(Collectors.toList());
     }
@@ -102,6 +110,15 @@ public class BookService {
                 }
                 return descriptionBuilder.toString();
             }
+        }
+        return null;
+    }
+
+    private Blob readImageFromFile(String fileName) throws IOException, SQLException {
+        ClassPathResource resource = new ClassPathResource("book-covers/" + fileName);
+        if (resource.exists()) {
+            byte[] imageBytes = Files.readAllBytes(resource.getFile().toPath());
+            return new SerialBlob(imageBytes);
         }
         return null;
     }

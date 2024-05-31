@@ -14,7 +14,7 @@ import java.sql.Blob;
 })
 public class BookDomain {
 
-    String bookId;
+    Integer bookId;
     Integer year;
     String title;
     String publisher;

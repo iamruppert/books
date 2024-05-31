@@ -84,7 +84,7 @@ public class BookService {
                             .replace(" ", "-");
 
                     String descriptionFileName = fileNameBase + ".txt";
-                    String imageFileName = fileNameBase + ".jpg";
+                    String imageFileName = fileNameBase + ".jpeg";
                     String description;
                     Blob image;
                     try {

@@ -28,7 +28,7 @@ public class BookController {
 
         return ResponseEntity.ok().body(books);
     }
-
+    @CrossOrigin(origins = "*")
     @GetMapping("/search")
     public ResponseEntity<?> getFilteredBooks(
             @PathParam("name") String name,
@@ -40,7 +40,7 @@ public class BookController {
         books = bookService.sortBooks(books, sortBy, sortOrder);
         return ResponseEntity.ok().body(books);
     }
-
+    @CrossOrigin(origins = "*")
     @GetMapping("/book/{id}")
     public ResponseEntity<?> getBook(
             @PathVariable Integer id

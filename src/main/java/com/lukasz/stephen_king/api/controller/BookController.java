@@ -1,7 +1,8 @@
 package com.lukasz.stephen_king.api.controller;
 
+import com.lukasz.stephen_king.api.dto.BookDto;
+import com.lukasz.stephen_king.api.dto.mapper.BookDtoMapper;
 import com.lukasz.stephen_king.buisness.BookService;
-import com.lukasz.stephen_king.domain.BookDomain;
 import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,38 +15,34 @@ import java.util.List;
 @RequestMapping("/api")
 public class BookController {
 
-    private BookService bookService;
+    private final BookService bookService;
+    private final BookDtoMapper bookDtoMapper;
 
     @CrossOrigin(origins = "*")
     @GetMapping("/books")
-    public ResponseEntity<?> getAllBooks(
+    public ResponseEntity<List<BookDto>> getAllBooks(
             @RequestParam(defaultValue = "pages") String sortBy,
             @RequestParam(defaultValue = "asc") String sortOrder) {
 
-        List<BookDomain> books = bookService.getAllBooks();
-
-        books = bookService.sortBooks(books, sortBy, sortOrder);
-
+        List<BookDto> books = bookService.getAllBooks(sortBy, sortOrder);
         return ResponseEntity.ok().body(books);
     }
+
     @CrossOrigin(origins = "*")
     @GetMapping("/search")
-    public ResponseEntity<?> getFilteredBooks(
+    public ResponseEntity<List<BookDto>> getFilteredBooks(
             @PathParam("name") String name,
             @RequestParam(defaultValue = "pages") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortOrder
-    ){
+            @RequestParam(defaultValue = "asc") String sortOrder) {
 
-        List<BookDomain> books = bookService.findBooks(name);
-        books = bookService.sortBooks(books, sortBy, sortOrder);
+        List<BookDto> books = bookService.findBooks(name, sortBy, sortOrder);
         return ResponseEntity.ok().body(books);
     }
+
     @CrossOrigin(origins = "*")
     @GetMapping("/book/{id}")
-    public ResponseEntity<?> getBook(
-            @PathVariable Integer id
-    ){
-        BookDomain book = bookService.getBook(id);
+    public ResponseEntity<BookDto> getBook(@PathVariable Integer id) {
+        BookDto book = bookService.getBook(id);
         return ResponseEntity.ok().body(book);
     }
 }

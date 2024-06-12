@@ -1,9 +1,11 @@
 package com.lukasz.stephen_king.buisness;
 
+import com.lukasz.stephen_king.api.dto.BookDto;
+import com.lukasz.stephen_king.api.dto.mapper.BookDtoMapper;
 import com.lukasz.stephen_king.buisness.dao.BookDao;
-import com.lukasz.stephen_king.domain.exception.NotFoundException;
 import com.lukasz.stephen_king.buisness.mapper.BookMapper;
 import com.lukasz.stephen_king.domain.BookDomain;
+import com.lukasz.stephen_king.domain.exception.NotFoundException;
 import com.lukasz.stephen_king.infrastructure.stephen_king.Book;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
@@ -28,32 +30,43 @@ public class BookService {
 
     private final BookDao bookDao;
     private final BookMapper bookMapper;
+    private final BookDtoMapper bookDtoMapper;
 
-    public List<BookDomain> getAllBooks() {
+    public List<BookDto> getAllBooks(String sortBy, String sortOrder) {
         List<Book> allBooks = bookDao.getAllBooks();
-        return fetchAndMapDescription(allBooks);
+        List<BookDomain> list = allBooks.stream()
+                .map(bookMapper::map)
+                .toList();
+        List<BookDomain> bookDomains = sortBooks(list, sortBy, sortOrder);
+        return fetchAndMapDescription(bookDomains);
     }
 
-    public BookDomain getBook(Integer id) {
+    public BookDto getBook(Integer id) {
         Optional<Book> optionalBook = bookDao.getBook(id);
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
-            return this.fetchAndMapDescription(List.of(book)).getFirst();
+            BookDomain mappedBook = bookMapper.map(book);
+            return this.fetchAndMapDescription(List.of(mappedBook)).getFirst();
         }
         else{
             throw new NotFoundException("Cannot find book with id: [%s]".formatted(id));
         }
     }
 
-    public List<BookDomain> findBooks(String name) {
+    public List<BookDto> findBooks(String name, String sortBy, String sortOrder) {
         List<Book> allBooks = bookDao.getAllBooks();
-        List<Book> filteredBooks = allBooks.stream()
+        List<BookDomain> list = allBooks.stream()
+                .map(bookMapper::map)
+                .toList();
+        List<BookDomain> filteredBooks = list.stream()
                 .filter(book -> book.getTitle().toLowerCase().contains(name.toLowerCase()))
                 .collect(Collectors.toList());
-        return fetchAndMapDescription(filteredBooks);
+
+        List<BookDomain> bookDomains = sortBooks(filteredBooks, sortBy, sortOrder);
+        return fetchAndMapDescription(bookDomains);
     }
 
-    public List<BookDomain> sortBooks(List<BookDomain> books, String sortBy, String sortOrder) {
+    private List<BookDomain> sortBooks(List<BookDomain> books, String sortBy, String sortOrder) {
         Comparator<BookDomain> comparator = switch (sortBy) {
             case "pages" -> Comparator.comparingInt(BookDomain::getPages);
             case "year" -> Comparator.comparingInt(BookDomain::getYear);
@@ -72,9 +85,8 @@ public class BookService {
     }
 
 
-    private List<BookDomain> fetchAndMapDescription(List<Book> books) {
+    private List<BookDto> fetchAndMapDescription(List<BookDomain> books) {
         return books.stream()
-                .map(bookMapper::map)
                 .peek(b -> {
                     String fileNameBase = b.getTitle().toLowerCase()
                             .replace(":", "")
@@ -96,6 +108,7 @@ public class BookService {
                     b.setDescription(description);
                     b.setImage(image);
                 })
+                .map(bookDtoMapper::mapToDto)
                 .collect(Collectors.toList());
     }
 

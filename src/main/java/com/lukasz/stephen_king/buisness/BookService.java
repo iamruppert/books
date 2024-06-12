@@ -38,7 +38,7 @@ public class BookService {
                 .map(bookMapper::map)
                 .toList();
         List<BookDomain> bookDomains = sortBooks(list, sortBy, sortOrder);
-        return fetchAndMapDescription(bookDomains);
+        return addMorePropertiesToBookAndMapToDto(bookDomains);
     }
 
     public BookDto getBook(Integer id) {
@@ -46,7 +46,7 @@ public class BookService {
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
             BookDomain mappedBook = bookMapper.map(book);
-            return this.fetchAndMapDescription(List.of(mappedBook)).getFirst();
+            return this.addMorePropertiesToBookAndMapToDto(List.of(mappedBook)).getFirst();
         }
         else{
             throw new NotFoundException("Cannot find book with id: [%s]".formatted(id));
@@ -63,7 +63,7 @@ public class BookService {
                 .collect(Collectors.toList());
 
         List<BookDomain> bookDomains = sortBooks(filteredBooks, sortBy, sortOrder);
-        return fetchAndMapDescription(bookDomains);
+        return addMorePropertiesToBookAndMapToDto(bookDomains);
     }
 
     private List<BookDomain> sortBooks(List<BookDomain> books, String sortBy, String sortOrder) {
@@ -85,7 +85,7 @@ public class BookService {
     }
 
 
-    private List<BookDto> fetchAndMapDescription(List<BookDomain> books) {
+    private List<BookDto> addMorePropertiesToBookAndMapToDto(List<BookDomain> books) {
         return books.stream()
                 .peek(b -> {
                     String fileNameBase = b.getTitle().toLowerCase()

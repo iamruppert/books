@@ -21,18 +21,20 @@ import java.util.concurrent.TimeUnit;
 public class WebClientConfiguration {
 
     public static final String STEPHEN_KING_URL = "https://stephen-king-api.onrender.com/";
+    public static final String TMDB_URL = "https://api.themoviedb.org/3/";
     public static final int TIMEOUT = 5000;
 
-    @Bean
-    public WebClient webClient(final ObjectMapper objectMapper){
-        final var httpClient = HttpClient.create()
+    private HttpClient httpClient(){
+        return HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, TIMEOUT)
                 .responseTimeout(Duration.ofMillis(TIMEOUT))
                 .doOnConnected(conn->
                         conn.addHandlerLast(new ReadTimeoutHandler(TIMEOUT, TimeUnit.MILLISECONDS))
                                 .addHandlerLast(new WriteTimeoutHandler(TIMEOUT, TimeUnit.MILLISECONDS)));
+    }
 
-        final var strategies = ExchangeStrategies
+    private ExchangeStrategies exchangeStrategies(final ObjectMapper objectMapper){
+        return ExchangeStrategies
                 .builder()
                 .codecs(configurer -> {
                     configurer
@@ -44,11 +46,24 @@ public class WebClientConfiguration {
                             .jackson2JsonDecoder(
                                     new Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON));
                 }).build();
+    }
 
+    @Bean(name = "stephenKingWebClient")
+    public WebClient stephenKingWebClient(final ObjectMapper objectMapper){
         return WebClient.builder()
                 .baseUrl(STEPHEN_KING_URL)
-                .exchangeStrategies(strategies)
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .exchangeStrategies(exchangeStrategies(objectMapper))
+                .clientConnector(new ReactorClientHttpConnector(httpClient()))
+                .build();
+    }
+
+    @Bean(name = "tmdbWebClient")
+    public WebClient tmbdWebClient(final ObjectMapper objectMapper){
+
+        return WebClient.builder()
+                .baseUrl(TMDB_URL)
+                .exchangeStrategies(exchangeStrategies(objectMapper))
+                .clientConnector(new ReactorClientHttpConnector(httpClient()))
                 .build();
     }
 }

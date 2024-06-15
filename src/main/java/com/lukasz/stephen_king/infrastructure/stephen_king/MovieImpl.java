@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MovieImpl implements MovieDao {
@@ -38,6 +39,18 @@ public class MovieImpl implements MovieDao {
                 .bodyToMono(MovieCreditsResponse.class)
                 .map(MovieCreditsResponse::getCrew)
                 .block();
+    }
+
+    @Override
+    public Optional<MovieDetails> getMovieDetails(int movieId) {
+        return tmdbWebClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/movie/{movie_id}")
+                        .build(movieId))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + API_KEY)
+                .retrieve()
+                .bodyToMono(MovieDetails.class)
+                .blockOptional();
     }
 
     @Setter

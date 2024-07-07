@@ -4,10 +4,7 @@ import com.lukasz.stephen_king.buisness.MovieService;
 import com.lukasz.stephen_king.domain.MovieDetailsDomain;
 import com.lukasz.stephen_king.domain.MovieDomain;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,11 +16,13 @@ public class MovieController {
     private final MovieService movieService;
 
     @GetMapping("/movies")
+    @CrossOrigin(origins = "*")
     public List<MovieDomain> getStephenKingMovies() {
         return movieService.getStephenKingMovies();
     }
 
-        @GetMapping("/movie/{id}")
+    @GetMapping("/movie/{id}")
+    @CrossOrigin(origins = "*")
     public MovieDetailsDomain getMovieDetails(@PathVariable int id) {
         return movieService.getMovieDetails(id);
     }

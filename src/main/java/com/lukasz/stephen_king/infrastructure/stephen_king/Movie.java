@@ -8,7 +8,7 @@ import lombok.*;
 @Value
 @Builder
 @EqualsAndHashCode(of = "id")
-@ToString(of={"id","originalTitle"})
+@ToString(of = {"id", "originalTitle"})
 public class Movie {
 
     int id;

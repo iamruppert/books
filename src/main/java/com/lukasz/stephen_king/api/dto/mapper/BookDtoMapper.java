@@ -8,5 +8,6 @@ import org.mapstruct.Mapper;
 public interface BookDtoMapper {
 
     BookDomain mapFromDto(BookDto bookDto);
+
     BookDto mapToDto(BookDomain bookDomain);
 }

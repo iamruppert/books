@@ -9,6 +9,8 @@ import java.util.Optional;
 @Component
 public interface BookDao {
 
+    List<Book> getBooks(int page, int pageSize);
+
     List<Book> getAllBooks();
 
     Optional<Book> getBook(Integer id);

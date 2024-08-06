@@ -20,12 +20,13 @@ public class BookController {
 
     @CrossOrigin(origins = "*")
     @GetMapping("/books")
-    public ResponseEntity<List<BookDto>> getAllBooks(
+    public ResponseEntity<List<BookDto>> getBooks(
             @RequestParam(defaultValue = "pages") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortOrder) {
-
-        List<BookDto> books = bookService.getAllBooks(sortBy, sortOrder);
-        return ResponseEntity.ok().body(books);
+            @RequestParam(defaultValue = "asc") String sortOrder,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        List<BookDto> books = bookService.getAllBooks(sortBy, sortOrder, page, pageSize);
+        return ResponseEntity.ok(books);
     }
 
     @CrossOrigin(origins = "*")

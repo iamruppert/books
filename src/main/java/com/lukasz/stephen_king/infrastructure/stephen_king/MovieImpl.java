@@ -24,7 +24,7 @@ public class MovieImpl implements MovieDao {
     private final WebClient tmdbWebClient;
 
     @Autowired
-    public MovieImpl(@Qualifier("tmdbWebClient")WebClient tmdbWebClient) {
+    public MovieImpl(@Qualifier("tmdbWebClient") WebClient tmdbWebClient) {
         this.tmdbWebClient = tmdbWebClient;
     }
 

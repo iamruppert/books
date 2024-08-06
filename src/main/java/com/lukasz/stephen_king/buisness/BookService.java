@@ -32,9 +32,9 @@ public class BookService {
     private final BookMapper bookMapper;
     private final BookDtoMapper bookDtoMapper;
 
-    public List<BookDto> getAllBooks(String sortBy, String sortOrder) {
-        List<Book> allBooks = bookDao.getAllBooks();
-        List<BookDomain> list = allBooks.stream()
+    public List<BookDto> getAllBooks(String sortBy, String sortOrder, int page, int pageSize) {
+        List<Book> books = bookDao.getBooks(page, pageSize);
+        List<BookDomain> list = books.stream()
                 .map(bookMapper::map)
                 .toList();
         List<BookDomain> bookDomains = sortBooks(list, sortBy, sortOrder);
@@ -47,8 +47,7 @@ public class BookService {
             Book book = optionalBook.get();
             BookDomain mappedBook = bookMapper.map(book);
             return this.addMorePropertiesToBookAndMapToDto(List.of(mappedBook)).getFirst();
-        }
-        else{
+        } else {
             throw new NotFoundException("Cannot find book with id: [%s]".formatted(id));
         }
     }

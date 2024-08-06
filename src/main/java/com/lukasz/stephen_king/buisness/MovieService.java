@@ -29,12 +29,11 @@ public class MovieService {
 
     }
 
-    public MovieDetailsDomain getMovieDetails(int id){
+    public MovieDetailsDomain getMovieDetails(int id) {
         Optional<MovieDetails> movieDetails = movieDao.getMovieDetails(id);
-        if(movieDetails.isEmpty()){
+        if (movieDetails.isEmpty()) {
             throw new NotFoundException("Cannot find movie with id: [%s]".formatted(id));
-        }
-        else{
+        } else {
             return movieMapper.mapToDomain(movieDetails.get());
         }
     }

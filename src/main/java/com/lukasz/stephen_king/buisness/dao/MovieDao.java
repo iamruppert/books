@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface MovieDao {
 
     List<Movie> getStephenKingMovies();
+
     Optional<MovieDetails> getMovieDetails(int movieId);
 }

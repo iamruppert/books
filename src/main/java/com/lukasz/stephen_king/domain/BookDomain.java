@@ -10,7 +10,7 @@ import java.sql.Blob;
 @EqualsAndHashCode(of = "bookId")
 @ToString(of = {
         "bookId", "year", "title",
-        "publisher", "ISBN", "pages", "description","image"
+        "publisher", "ISBN", "pages", "description", "image"
 })
 public class BookDomain {
 

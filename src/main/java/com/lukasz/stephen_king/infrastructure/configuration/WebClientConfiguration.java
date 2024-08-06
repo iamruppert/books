@@ -24,16 +24,16 @@ public class WebClientConfiguration {
     public static final String TMDB_URL = "https://api.themoviedb.org/3/";
     public static final int TIMEOUT = 5000;
 
-    private HttpClient httpClient(){
+    private HttpClient httpClient() {
         return HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, TIMEOUT)
                 .responseTimeout(Duration.ofMillis(TIMEOUT))
-                .doOnConnected(conn->
+                .doOnConnected(conn ->
                         conn.addHandlerLast(new ReadTimeoutHandler(TIMEOUT, TimeUnit.MILLISECONDS))
                                 .addHandlerLast(new WriteTimeoutHandler(TIMEOUT, TimeUnit.MILLISECONDS)));
     }
 
-    private ExchangeStrategies exchangeStrategies(final ObjectMapper objectMapper){
+    private ExchangeStrategies exchangeStrategies(final ObjectMapper objectMapper) {
         return ExchangeStrategies
                 .builder()
                 .codecs(configurer -> {
@@ -49,7 +49,7 @@ public class WebClientConfiguration {
     }
 
     @Bean(name = "stephenKingWebClient")
-    public WebClient stephenKingWebClient(final ObjectMapper objectMapper){
+    public WebClient stephenKingWebClient(final ObjectMapper objectMapper) {
         return WebClient.builder()
                 .baseUrl(STEPHEN_KING_URL)
                 .exchangeStrategies(exchangeStrategies(objectMapper))
@@ -58,7 +58,7 @@ public class WebClientConfiguration {
     }
 
     @Bean(name = "tmdbWebClient")
-    public WebClient tmbdWebClient(final ObjectMapper objectMapper){
+    public WebClient tmbdWebClient(final ObjectMapper objectMapper) {
 
         return WebClient.builder()
                 .baseUrl(TMDB_URL)

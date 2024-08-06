@@ -33,12 +33,13 @@ public class BookService {
     private final BookDtoMapper bookDtoMapper;
 
     public List<BookDto> getAllBooks(String sortBy, String sortOrder, int page, int pageSize) {
-        List<Book> books = bookDao.getBooks(page, pageSize);
+        List<Book> books = bookDao.getAllBooks();
         List<BookDomain> list = books.stream()
                 .map(bookMapper::map)
                 .toList();
-        List<BookDomain> bookDomains = sortBooks(list, sortBy, sortOrder);
-        return addMorePropertiesToBookAndMapToDto(bookDomains);
+        List<BookDomain> sortedBooks = sortBooks(list, sortBy, sortOrder);
+        List<BookDomain> paginatedBooks = paginate(sortedBooks, page, pageSize);
+        return addPropertiesAndMapToDto(paginatedBooks);
     }
 
     public BookDto getBook(Integer id) {
@@ -46,7 +47,7 @@ public class BookService {
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
             BookDomain mappedBook = bookMapper.map(book);
-            return this.addMorePropertiesToBookAndMapToDto(List.of(mappedBook)).getFirst();
+            return addPropertiesAndMapToDto(List.of(mappedBook)).getFirst();
         } else {
             throw new NotFoundException("Cannot find book with id: [%s]".formatted(id));
         }
@@ -54,23 +55,20 @@ public class BookService {
 
     public List<BookDto> findBooks(String name, String sortBy, String sortOrder, int page, int pageSize) {
         List<Book> allBooks = bookDao.getAllBooks();
-        List<BookDomain> list = allBooks.stream()
+        List<BookDomain> bookDomains = allBooks.stream()
                 .map(bookMapper::map)
-                .toList();
-        List<BookDomain> filteredBooks = list.stream()
                 .filter(book -> book.getTitle().toLowerCase().contains(name.toLowerCase()))
-                .collect(Collectors.toList());
+                .toList();
 
-        List<BookDomain> sortedBooks = sortBooks(filteredBooks, sortBy, sortOrder);
-        return paginateAndMapToDto(sortedBooks, page, pageSize);
+        List<BookDomain> sortedBooks = sortBooks(bookDomains, sortBy, sortOrder);
+        List<BookDomain> paginatedBooks = paginate(sortedBooks, page, pageSize);
+        return addPropertiesAndMapToDto(paginatedBooks);
     }
 
-
-    private List<BookDto> paginateAndMapToDto(List<BookDomain> books, int page, int pageSize) {
+    private List<BookDomain> paginate(List<BookDomain> books, int page, int pageSize) {
         int start = page * pageSize;
         int end = Math.min(start + pageSize, books.size());
-        List<BookDomain> paginatedBooks = books.subList(start, end);
-        return addMorePropertiesToBookAndMapToDto(paginatedBooks);
+        return books.subList(start, end);
     }
 
     private List<BookDomain> sortBooks(List<BookDomain> books, String sortBy, String sortOrder) {
@@ -91,11 +89,10 @@ public class BookService {
         return books;
     }
 
-
-    private List<BookDto> addMorePropertiesToBookAndMapToDto(List<BookDomain> books) {
+    private List<BookDto> addPropertiesAndMapToDto(List<BookDomain> books) {
         return books.stream()
-                .peek(b -> {
-                    String fileNameBase = b.getTitle().toLowerCase()
+                .map(book -> {
+                    String fileNameBase = book.getTitle().toLowerCase()
                             .replace(":", "")
                             .replace(".", "")
                             .replace("'", "-")
@@ -104,31 +101,23 @@ public class BookService {
 
                     String descriptionFileName = fileNameBase + ".txt";
                     String imageFileName = fileNameBase + ".jpeg";
-                    String description;
-                    Blob image;
+
                     try {
-                        description = readDescriptionFromFile(descriptionFileName);
-                        image = readImageFromFile(imageFileName);
+                        book.setDescription(readDescriptionFromFile(descriptionFileName));
+                        book.setImage(readImageFromFile(imageFileName));
                     } catch (IOException | SQLException e) {
                         throw new RuntimeException(e);
                     }
-                    b.setDescription(description);
-                    b.setImage(image);
+                    return bookDtoMapper.mapToDto(book);
                 })
-                .map(bookDtoMapper::mapToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private String readDescriptionFromFile(String fileName) throws IOException {
         ClassPathResource resource = new ClassPathResource("book-descriptions/" + fileName);
         if (resource.exists()) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
-                StringBuilder descriptionBuilder = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    descriptionBuilder.append(line);
-                }
-                return descriptionBuilder.toString();
+                return reader.lines().collect(Collectors.joining("\n"));
             }
         }
         return null;
@@ -142,6 +131,4 @@ public class BookService {
         }
         return null;
     }
-
-
 }

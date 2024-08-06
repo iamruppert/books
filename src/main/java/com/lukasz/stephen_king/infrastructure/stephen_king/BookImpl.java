@@ -21,16 +21,6 @@ public class BookImpl implements BookDao {
     }
 
     @Override
-    public List<Book> getBooks(int page, int pageSize) {
-        List<Book> allBooks = getAllBooks();
-
-        int start = page * pageSize;
-        int end = Math.min(start + pageSize, allBooks.size());
-        return allBooks.subList(start, end);
-    }
-
-
-    @Override
     public List<Book> getAllBooks() {
         return webClient.get()
                 .uri("/api/books")

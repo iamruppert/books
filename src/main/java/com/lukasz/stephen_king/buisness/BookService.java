@@ -52,7 +52,7 @@ public class BookService {
         }
     }
 
-    public List<BookDto> findBooks(String name, String sortBy, String sortOrder) {
+    public List<BookDto> findBooks(String name, String sortBy, String sortOrder, int page, int pageSize) {
         List<Book> allBooks = bookDao.getAllBooks();
         List<BookDomain> list = allBooks.stream()
                 .map(bookMapper::map)
@@ -61,8 +61,16 @@ public class BookService {
                 .filter(book -> book.getTitle().toLowerCase().contains(name.toLowerCase()))
                 .collect(Collectors.toList());
 
-        List<BookDomain> bookDomains = sortBooks(filteredBooks, sortBy, sortOrder);
-        return addMorePropertiesToBookAndMapToDto(bookDomains);
+        List<BookDomain> sortedBooks = sortBooks(filteredBooks, sortBy, sortOrder);
+        return paginateAndMapToDto(sortedBooks, page, pageSize);
+    }
+
+
+    private List<BookDto> paginateAndMapToDto(List<BookDomain> books, int page, int pageSize) {
+        int start = page * pageSize;
+        int end = Math.min(start + pageSize, books.size());
+        List<BookDomain> paginatedBooks = books.subList(start, end);
+        return addMorePropertiesToBookAndMapToDto(paginatedBooks);
     }
 
     private List<BookDomain> sortBooks(List<BookDomain> books, String sortBy, String sortOrder) {

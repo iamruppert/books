@@ -3,7 +3,6 @@ package com.lukasz.stephen_king.api.controller;
 import com.lukasz.stephen_king.api.dto.BookDto;
 import com.lukasz.stephen_king.api.dto.mapper.BookDtoMapper;
 import com.lukasz.stephen_king.buisness.BookService;
-import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,13 +30,14 @@ public class BookController {
 
     @CrossOrigin(origins = "*")
     @GetMapping("/search")
-    public ResponseEntity<List<BookDto>> getFilteredBooks(
-            @PathParam("name") String name,
+    public ResponseEntity<List<BookDto>> searchBooks(
+            @RequestParam String name,
             @RequestParam(defaultValue = "pages") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortOrder) {
-
-        List<BookDto> books = bookService.findBooks(name, sortBy, sortOrder);
-        return ResponseEntity.ok().body(books);
+            @RequestParam(defaultValue = "asc") String sortOrder,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        List<BookDto> books = bookService.findBooks(name, sortBy, sortOrder, page, pageSize);
+        return ResponseEntity.ok(books);
     }
 
     @CrossOrigin(origins = "*")

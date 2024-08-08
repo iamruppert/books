@@ -40,6 +40,22 @@ public class BookImpl implements BookDao {
                 .blockOptional();
     }
 
+    @Override
+    public Villain getVillain(Integer id) {
+        return webClient.get()
+                .uri("/api/villain/" + id)
+                .retrieve()
+                .bodyToMono(VillainApiResponse.class)
+                .map(VillainApiResponse::getData)
+                .block();
+    }
+
+    @Getter
+    private static class VillainApiResponse {
+        private Villain data;
+
+    }
+
     @Setter
     @Getter
     private static class ApiResponse {

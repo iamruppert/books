@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.List;
+
 @With
 @Value
 @Builder
@@ -20,6 +22,7 @@ public class Book {
     String publisher;
     String ISBN;
     Integer pages;
+    List<VillainReference> referenceList;
 
     @JsonCreator
     public Book(@JsonProperty("id") Integer bookId,
@@ -27,13 +30,16 @@ public class Book {
                 @JsonProperty("Title") String title,
                 @JsonProperty("Publisher") String publisher,
                 @JsonProperty("ISBN") String ISBN,
-                @JsonProperty("Pages") Integer pages) {
+                @JsonProperty("Pages") Integer pages,
+                @JsonProperty("villains") List<VillainReference> referenceList
+                ) {
         this.bookId = bookId;
         this.year = year;
         this.title = title;
         this.publisher = publisher;
         this.ISBN = ISBN;
         this.pages = pages;
+        this.referenceList = referenceList;
     }
 
 }

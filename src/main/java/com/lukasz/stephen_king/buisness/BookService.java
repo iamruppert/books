@@ -7,6 +7,8 @@ import com.lukasz.stephen_king.buisness.mapper.BookMapper;
 import com.lukasz.stephen_king.domain.BookDomain;
 import com.lukasz.stephen_king.domain.exception.NotFoundException;
 import com.lukasz.stephen_king.infrastructure.stephen_king.Book;
+import com.lukasz.stephen_king.infrastructure.stephen_king.Villain;
+import com.lukasz.stephen_king.infrastructure.stephen_king.VillainReference;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Sort;
@@ -19,6 +21,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -44,9 +47,16 @@ public class BookService {
 
     public BookDto getBook(Integer id) {
         Optional<Book> optionalBook = bookDao.getBook(id);
+        List<Villain> villains = new ArrayList<>();
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
-            BookDomain mappedBook = bookMapper.map(book);
+            List<VillainReference> referenceList = book.getReferenceList();
+            for (VillainReference villainReference : referenceList) {
+                String url = villainReference.getUrl();
+                Integer villainId = Integer.valueOf(url.substring(url.lastIndexOf("/") + 1));
+                villains.add(bookDao.getVillain(villainId));
+            }
+            BookDomain mappedBook = bookMapper.map(book).withVillains(villains);
             return addPropertiesAndMapToDto(List.of(mappedBook)).getFirst();
         } else {
             throw new NotFoundException("Cannot find book with id: [%s]".formatted(id));

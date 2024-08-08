@@ -1,8 +1,10 @@
 package com.lukasz.stephen_king.api.dto;
 
+import com.lukasz.stephen_king.infrastructure.stephen_king.Villain;
 import lombok.*;
 
 import java.sql.Blob;
+import java.util.List;
 
 @Data
 @With
@@ -19,5 +21,5 @@ public class BookDto {
     Integer pages;
     String description;
     Blob image;
-
+    List<Villain> villains;
 }

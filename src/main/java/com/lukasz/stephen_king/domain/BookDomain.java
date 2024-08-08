@@ -1,8 +1,10 @@
 package com.lukasz.stephen_king.domain;
 
+import com.lukasz.stephen_king.infrastructure.stephen_king.Villain;
 import lombok.*;
 
 import java.sql.Blob;
+import java.util.List;
 
 @With
 @Data
@@ -10,7 +12,7 @@ import java.sql.Blob;
 @EqualsAndHashCode(of = "bookId")
 @ToString(of = {
         "bookId", "year", "title",
-        "publisher", "ISBN", "pages", "description", "image"
+        "publisher", "ISBN", "pages", "description", "image", "villains"
 })
 public class BookDomain {
 
@@ -22,4 +24,5 @@ public class BookDomain {
     Integer pages;
     String description;
     Blob image;
+    List<Villain> villains;
 }

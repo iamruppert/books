@@ -4,7 +4,9 @@ import com.lukasz.stephen_king.api.dto.BookDto;
 import com.lukasz.stephen_king.api.dto.mapper.BookDtoMapper;
 import com.lukasz.stephen_king.buisness.dao.BookDao;
 import com.lukasz.stephen_king.buisness.mapper.BookMapper;
+import com.lukasz.stephen_king.buisness.mapper.VillainMapper;
 import com.lukasz.stephen_king.domain.BookDomain;
+import com.lukasz.stephen_king.domain.VillainDomain;
 import com.lukasz.stephen_king.domain.exception.NotFoundException;
 import com.lukasz.stephen_king.infrastructure.stephen_king.Book;
 import com.lukasz.stephen_king.infrastructure.stephen_king.Villain;
@@ -35,6 +37,8 @@ public class BookService {
     private final BookMapper bookMapper;
     private final BookDtoMapper bookDtoMapper;
 
+    private final VillainMapper villainMapper;
+
     public List<BookDto> getAllBooks(String sortBy, String sortOrder, int page, int pageSize) {
         List<Book> books = bookDao.getAllBooks();
         List<BookDomain> list = books.stream()
@@ -47,17 +51,20 @@ public class BookService {
 
     public BookDto getBook(Integer id) {
         Optional<Book> optionalBook = bookDao.getBook(id);
-        List<Villain> villains = new ArrayList<>();
+        List<VillainDomain> villainDomains = new ArrayList<>();
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
+            BookDomain bookDomain = bookMapper.map(book);
             List<VillainReference> referenceList = book.getReferenceList();
             for (VillainReference villainReference : referenceList) {
                 String url = villainReference.getUrl();
                 Integer villainId = Integer.valueOf(url.substring(url.lastIndexOf("/") + 1));
-                villains.add(bookDao.getVillain(villainId));
+                Villain villain = bookDao.getVillain(villainId);
+                VillainDomain villainDomain = villainMapper.mapToDomain(villain);
+                villainDomains.add(villainDomain);
             }
-            BookDomain mappedBook = bookMapper.map(book).withVillains(villains);
-            return addPropertiesAndMapToDto(List.of(mappedBook)).getFirst();
+            bookDomain.setVillains(villainDomains);
+            return addPropertiesAndMapToDto(List.of(bookDomain)).getFirst();
         } else {
             throw new NotFoundException("Cannot find book with id: [%s]".formatted(id));
         }

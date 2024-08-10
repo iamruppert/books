@@ -7,6 +7,7 @@ import java.sql.Blob;
 import java.util.List;
 
 @With
+@Setter
 @Data
 @Builder
 @EqualsAndHashCode(of = "bookId")
@@ -24,5 +25,5 @@ public class BookDomain {
     Integer pages;
     String description;
     Blob image;
-    List<Villain> villains;
+    List<VillainDomain> villains;
 }

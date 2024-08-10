@@ -1,7 +1,9 @@
 package com.lukasz.stephen_king.buisness;
 
 import com.lukasz.stephen_king.buisness.dao.MovieDao;
+import com.lukasz.stephen_king.buisness.mapper.CastMemberMapper;
 import com.lukasz.stephen_king.buisness.mapper.MovieMapper;
+import com.lukasz.stephen_king.domain.CastMemberDomain;
 import com.lukasz.stephen_king.domain.MovieDetailsDomain;
 import com.lukasz.stephen_king.domain.MovieDomain;
 import com.lukasz.stephen_king.domain.exception.NotFoundException;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +24,8 @@ public class MovieService {
 
     private final MovieDao movieDao;
     private final MovieMapper movieMapper;
+
+    private final CastMemberMapper castMemberMapper;
 
 
     public List<MovieDomain> getStephenKingMovies() {
@@ -36,8 +41,13 @@ public class MovieService {
         if (movieDetails.isEmpty()) {
             throw new NotFoundException("Cannot find movie with id: [%s]".formatted(id));
         } else {
-            ArrayList<CastMember> movieCast = movieDao.getMovieCast(id).get();
-            return movieMapper.mapToDomain(movieDetails.get()).withCast(movieCast);
+            ArrayList<CastMember> castMembers = movieDao.getMovieCast(id).get();
+            ArrayList<CastMemberDomain> castMemberDomains = castMembers.stream()
+                    .map(castMemberMapper::mapToDomain)
+                    .collect(Collectors.toCollection(ArrayList::new));
+            MovieDetailsDomain movieDetailsDomain = movieMapper.mapToDomain(movieDetails.get());
+            movieDetailsDomain.setCast(castMemberDomains);
+            return movieDetailsDomain;
         }
     }
 }

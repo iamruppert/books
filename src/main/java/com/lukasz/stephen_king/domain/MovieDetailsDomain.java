@@ -28,6 +28,6 @@ public class MovieDetailsDomain {
     int runtime;
     double voteAverage;
 
-    ArrayList<CastMember> cast;
+    ArrayList<CastMemberDomain> cast;
 
 }

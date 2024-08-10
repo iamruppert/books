@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,8 +37,8 @@ public class MovieImpl implements MovieDao {
                         .build(STEPHEN_KING_ID))
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + API_KEY)
                 .retrieve()
-                .bodyToMono(MovieCreditsResponse.class)
-                .map(MovieCreditsResponse::getCrew)
+                .bodyToMono(StephenKingMoviesResponse.class)
+                .map(StephenKingMoviesResponse::getCrew)
                 .block();
     }
 
@@ -53,12 +54,34 @@ public class MovieImpl implements MovieDao {
                 .blockOptional();
     }
 
+    @Override
+    public Optional<ArrayList<CastMember>> getMovieCast(Integer movieId) {
+        return tmdbWebClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/movie/{movie_id}/credits")
+                        .build(movieId))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + API_KEY)
+                .retrieve()
+                .bodyToMono(MovieCastMemberResponse.class)
+                .map(response -> Optional.ofNullable(response.getCast()).orElse(new ArrayList<>()))
+                .blockOptional();
+    }
+
+
+
     @Setter
     @Getter
-    private static class MovieCreditsResponse {
+    private static class StephenKingMoviesResponse {
         private List<Movie> cast;
         private List<Movie> crew;
         private int id;
+    }
+
+    @Setter
+    @Getter
+    private static class MovieCastMemberResponse {
+        private Integer id;
+        private ArrayList<CastMember> cast;
     }
 
 }

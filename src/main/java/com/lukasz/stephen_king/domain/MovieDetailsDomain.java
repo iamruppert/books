@@ -1,6 +1,9 @@
 package com.lukasz.stephen_king.domain;
 
+import com.lukasz.stephen_king.infrastructure.stephen_king.CastMember;
 import lombok.*;
+
+import java.util.ArrayList;
 
 @With
 @Data
@@ -9,7 +12,7 @@ import lombok.*;
 @ToString(of = {
         "id",
         "imdbId", "backdropPath", "budget", "originalLanguage",
-        "originalTitle", "overview", "posterPath", "releaseDate", "runtime", "voteAverage"
+        "originalTitle", "overview", "posterPath", "releaseDate", "runtime", "voteAverage", "cast"
 })
 public class MovieDetailsDomain {
 
@@ -25,5 +28,6 @@ public class MovieDetailsDomain {
     int runtime;
     double voteAverage;
 
+    ArrayList<CastMember> cast;
 
 }

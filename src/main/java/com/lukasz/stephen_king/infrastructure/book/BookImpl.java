@@ -1,4 +1,4 @@
-package com.lukasz.stephen_king.infrastructure.stephen_king;
+package com.lukasz.stephen_king.infrastructure.book;
 
 import com.lukasz.stephen_king.buisness.dao.BookDao;
 import lombok.Getter;

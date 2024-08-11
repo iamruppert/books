@@ -7,9 +7,9 @@ import com.lukasz.stephen_king.domain.CastMemberDomain;
 import com.lukasz.stephen_king.domain.MovieDetailsDomain;
 import com.lukasz.stephen_king.domain.MovieDomain;
 import com.lukasz.stephen_king.domain.exception.NotFoundException;
-import com.lukasz.stephen_king.infrastructure.stephen_king.CastMember;
-import com.lukasz.stephen_king.infrastructure.stephen_king.Movie;
-import com.lukasz.stephen_king.infrastructure.stephen_king.MovieDetails;
+import com.lukasz.stephen_king.infrastructure.movie.CastMember;
+import com.lukasz.stephen_king.infrastructure.movie.Movie;
+import com.lukasz.stephen_king.infrastructure.movie.MovieDetails;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

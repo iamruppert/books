@@ -1,7 +1,7 @@
 package com.lukasz.stephen_king.buisness.dao;
 
-import com.lukasz.stephen_king.infrastructure.stephen_king.Book;
-import com.lukasz.stephen_king.infrastructure.stephen_king.Villain;
+import com.lukasz.stephen_king.infrastructure.book.Book;
+import com.lukasz.stephen_king.infrastructure.book.Villain;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

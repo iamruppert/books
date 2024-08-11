@@ -1,7 +1,7 @@
 package com.lukasz.stephen_king.buisness.mapper;
 
 import com.lukasz.stephen_king.domain.BookDomain;
-import com.lukasz.stephen_king.infrastructure.stephen_king.Book;
+import com.lukasz.stephen_king.infrastructure.book.Book;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

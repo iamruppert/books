@@ -1,6 +1,5 @@
 package com.lukasz.stephen_king.domain;
 
-import com.lukasz.stephen_king.infrastructure.stephen_king.Villain;
 import lombok.*;
 
 import java.sql.Blob;

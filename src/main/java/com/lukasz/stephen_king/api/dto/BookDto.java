@@ -1,6 +1,6 @@
 package com.lukasz.stephen_king.api.dto;
 
-import com.lukasz.stephen_king.infrastructure.stephen_king.Villain;
+import com.lukasz.stephen_king.infrastructure.book.Villain;
 import lombok.*;
 
 import java.sql.Blob;

@@ -1,4 +1,4 @@
-package com.lukasz.stephen_king.infrastructure.stephen_king;
+package com.lukasz.stephen_king.infrastructure.movie;
 
 import com.lukasz.stephen_king.buisness.dao.MovieDao;
 import lombok.Getter;

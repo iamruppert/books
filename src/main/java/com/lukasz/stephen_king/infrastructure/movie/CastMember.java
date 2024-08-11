@@ -1,10 +1,8 @@
-package com.lukasz.stephen_king.infrastructure.stephen_king;
+package com.lukasz.stephen_king.infrastructure.movie;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-
-import java.util.List;
 
 @With
 @Value

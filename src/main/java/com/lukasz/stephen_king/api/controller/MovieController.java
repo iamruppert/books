@@ -1,9 +1,10 @@
 package com.lukasz.stephen_king.api.controller;
 
+import com.lukasz.stephen_king.api.dto.MovieDto;
 import com.lukasz.stephen_king.buisness.MovieService;
 import com.lukasz.stephen_king.domain.MovieDetailsDomain;
-import com.lukasz.stephen_king.domain.MovieDomain;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,8 +18,9 @@ public class MovieController {
 
     @GetMapping("/movies")
     @CrossOrigin(origins = "*")
-    public List<MovieDomain> getStephenKingMovies() {
-        return movieService.getStephenKingMovies();
+    public ResponseEntity<List<MovieDto>> getStephenKingMovies() {
+        List<MovieDto> stephenKingMovies = movieService.getStephenKingMovies();
+        return ResponseEntity.ok().body(stephenKingMovies);
     }
 
     @GetMapping("/movie/{id}")

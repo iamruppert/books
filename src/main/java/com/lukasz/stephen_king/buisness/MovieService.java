@@ -1,5 +1,7 @@
 package com.lukasz.stephen_king.buisness;
 
+import com.lukasz.stephen_king.api.dto.MovieDto;
+import com.lukasz.stephen_king.api.dto.mapper.MovieDtoMapper;
 import com.lukasz.stephen_king.buisness.dao.MovieDao;
 import com.lukasz.stephen_king.buisness.mapper.CastMemberMapper;
 import com.lukasz.stephen_king.buisness.mapper.MovieMapper;
@@ -26,12 +28,14 @@ public class MovieService {
     private final MovieMapper movieMapper;
 
     private final CastMemberMapper castMemberMapper;
+    private final MovieDtoMapper movieDtoMapper;
 
 
-    public List<MovieDomain> getStephenKingMovies() {
+    public List<MovieDto> getStephenKingMovies() {
         List<Movie> movies = movieDao.getStephenKingMovies();
         return movies.stream()
                 .map(movieMapper::mapToDomain)
+                .map(movieDtoMapper::mapToDto)
                 .toList();
 
     }

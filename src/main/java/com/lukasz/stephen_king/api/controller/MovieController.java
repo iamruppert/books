@@ -1,8 +1,8 @@
 package com.lukasz.stephen_king.api.controller;
 
+import com.lukasz.stephen_king.api.dto.MovieDetailsDto;
 import com.lukasz.stephen_king.api.dto.MovieDto;
 import com.lukasz.stephen_king.buisness.MovieService;
-import com.lukasz.stephen_king.domain.MovieDetailsDomain;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,8 @@ public class MovieController {
 
     @GetMapping("/movie/{id}")
     @CrossOrigin(origins = "*")
-    public MovieDetailsDomain getMovieDetails(@PathVariable int id) {
-        return movieService.getMovieDetails(id);
+    public ResponseEntity<MovieDetailsDto> getMovieDetails(@PathVariable int id) {
+        MovieDetailsDto movieDetails = movieService.getMovieDetails(id);
+        return ResponseEntity.ok().body(movieDetails);
     }
 }

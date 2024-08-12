@@ -1,5 +1,6 @@
 package com.lukasz.stephen_king.buisness;
 
+import com.lukasz.stephen_king.api.dto.MovieDetailsDto;
 import com.lukasz.stephen_king.api.dto.MovieDto;
 import com.lukasz.stephen_king.api.dto.mapper.MovieDtoMapper;
 import com.lukasz.stephen_king.buisness.dao.MovieDao;
@@ -7,7 +8,6 @@ import com.lukasz.stephen_king.buisness.mapper.CastMemberMapper;
 import com.lukasz.stephen_king.buisness.mapper.MovieMapper;
 import com.lukasz.stephen_king.domain.CastMemberDomain;
 import com.lukasz.stephen_king.domain.MovieDetailsDomain;
-import com.lukasz.stephen_king.domain.MovieDomain;
 import com.lukasz.stephen_king.domain.exception.NotFoundException;
 import com.lukasz.stephen_king.infrastructure.movie.CastMember;
 import com.lukasz.stephen_king.infrastructure.movie.Movie;
@@ -40,7 +40,7 @@ public class MovieService {
 
     }
 
-    public MovieDetailsDomain getMovieDetails(int id) {
+    public MovieDetailsDto getMovieDetails(int id) {
         Optional<MovieDetails> movieDetails = movieDao.getMovieDetails(id);
         if (movieDetails.isEmpty()) {
             throw new NotFoundException("Cannot find movie with id: [%s]".formatted(id));
@@ -51,7 +51,7 @@ public class MovieService {
                     .collect(Collectors.toCollection(ArrayList::new));
             MovieDetailsDomain movieDetailsDomain = movieMapper.mapToDomain(movieDetails.get());
             movieDetailsDomain.setCast(castMemberDomains);
-            return movieDetailsDomain;
+            return movieDtoMapper.mapToDto(movieDetailsDomain);
         }
     }
 }

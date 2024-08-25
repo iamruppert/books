@@ -55,6 +55,8 @@ To run the project, execute:
     - ### Parameters:
         - `sortBy` (default: "pages"): Sort by attribute.
         - `sortOrder` (default: "asc"): Sort order (ascending/descending).
+        - `page` (default: "0"): Number of page.
+        - `pageSize` (default: "10"): Number of elements per page.
 
 - ### <b>GET /api/search </b> <br>
 
@@ -64,6 +66,8 @@ To run the project, execute:
         - `name`: Name of the book.
         - `sortBy` (default: "pages"): Sort by attribute.
         - `sortOrder` (default: "asc"): Sort order (ascending/descending).
+        - `page` (default: "0"): Number of page.
+        - `pageSize` (default: "10"): Number of elements per page.
 
 - ### <b>GET /api/book/{id} </b> <br>
 

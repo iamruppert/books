@@ -91,4 +91,33 @@ public class BookServiceTest {
         assertEquals(bookDto2, result.get(0));
     }
 
+    @Test
+    public void shouldReturnSortedBooksByPagesCorrectly() {
+        Book book1 = TestObjectFactory.createBook1;
+        Book book2 = TestObjectFactory.createBook2;
+
+        BookDomain bookDomain1 = TestObjectFactory.createBookDomain1;
+        BookDomain bookDomain2 = TestObjectFactory.createBookDomain2;
+
+        BookDto bookDto1 = TestObjectFactory.createBookDto1;
+        BookDto bookDto2 = TestObjectFactory.createBookDto2;
+
+        when(bookDao.getAllBooks()).thenReturn(List.of(book1, book2));
+        when(bookMapper.map(book1)).thenReturn(bookDomain1);
+        when(bookMapper.map(book2)).thenReturn(bookDomain2);
+        when(bookDtoMapper.mapToDto(bookDomain1)).thenReturn(bookDto1);
+        when(bookDtoMapper.mapToDto(bookDomain2)).thenReturn(bookDto2);
+
+        List<BookDto> result = bookService.getAllBooks("pages", "asc", 0, 10);
+
+        assertEquals(2, result.size());
+        assertEquals(bookDto2, result.get(0));
+        assertEquals(bookDto1, result.get(1));
+
+        result = bookService.getAllBooks("pages", "asc", 0, 1);
+
+        assertEquals(1, result.size());
+        assertEquals(bookDto2, result.get(0));
+    }
+
 }

@@ -35,52 +35,14 @@ public class BookServiceTest {
     @Test
     public void shouldReturnSortedBooksByTitleCorrectly() {
 
-        Book book1 = Book.builder()
-                .bookId(1)
-                .year(1986)
-                .title("It")
-                .publisher("Viking")
-                .ISBN("978-0450411434")
-                .pages(1138)
-                .referenceList(List.of())
-                .build();
+        Book book1 = TestObjectFactory.createBook1;
+        Book book2 = TestObjectFactory.createBook2;
 
-        Book book2 = Book.builder()
-                .bookId(2)
-                .year(1977)
-                .title("The Shining")
-                .publisher("Doubleday")
-                .ISBN("978-0385121675")
-                .pages(447)
-                .referenceList(List.of())
-                .build();
+        BookDomain bookDomain1 = TestObjectFactory.createBookDomain1;
+        BookDomain bookDomain2 = TestObjectFactory.createBookDomain2;
 
-        BookDomain bookDomain1 = BookDomain.builder()
-                .bookId(1)
-                .year(1986)
-                .title("It")
-                .publisher("Viking")
-                .ISBN("978-0450411434")
-                .pages(1138)
-                .description("A horror novel by Stephen King.")
-                .image(null)
-                .villains(List.of())
-                .build();
-
-        BookDomain bookDomain2 = BookDomain.builder()
-                .bookId(2)
-                .year(1977)
-                .title("The Shining")
-                .publisher("Doubleday")
-                .ISBN("978-0385121675")
-                .pages(447)
-                .description("A horror novel by Stephen King.")
-                .image(null)
-                .villains(List.of())
-                .build();
-
-        BookDto bookDto1 = new BookDto(1, 1986, "It", "Viking", "978-0450411434", 1138, "A horror novel by Stephen King.", null, List.of());
-        BookDto bookDto2 = new BookDto(2, 1977, "The Shining", "Doubleday", "978-0385121675", 447, "A horror novel by Stephen King.", null, List.of());
+        BookDto bookDto1 = TestObjectFactory.createBookDto1;
+        BookDto bookDto2 = TestObjectFactory.createBookDto2;
 
         when(bookDao.getAllBooks()).thenReturn(List.of(book1, book2));
         when(bookMapper.map(book1)).thenReturn(bookDomain1);
@@ -95,6 +57,35 @@ public class BookServiceTest {
         assertEquals(bookDto1, result.get(1));
 
         result = bookService.getAllBooks("title", "desc", 0, 1);
+
+        assertEquals(1, result.size());
+        assertEquals(bookDto2, result.get(0));
+    }
+
+    @Test
+    public void shouldReturnSortedBooksByYearCorrectly() {
+        Book book1 = TestObjectFactory.createBook1;
+        Book book2 = TestObjectFactory.createBook2;
+
+        BookDomain bookDomain1 = TestObjectFactory.createBookDomain1;
+        BookDomain bookDomain2 = TestObjectFactory.createBookDomain2;
+
+        BookDto bookDto1 = TestObjectFactory.createBookDto1;
+        BookDto bookDto2 = TestObjectFactory.createBookDto2;
+
+        when(bookDao.getAllBooks()).thenReturn(List.of(book1, book2));
+        when(bookMapper.map(book1)).thenReturn(bookDomain1);
+        when(bookMapper.map(book2)).thenReturn(bookDomain2);
+        when(bookDtoMapper.mapToDto(bookDomain1)).thenReturn(bookDto1);
+        when(bookDtoMapper.mapToDto(bookDomain2)).thenReturn(bookDto2);
+
+        List<BookDto> result = bookService.getAllBooks("year", "asc", 0, 10);
+
+        assertEquals(2, result.size());
+        assertEquals(bookDto2, result.get(0));
+        assertEquals(bookDto1, result.get(1));
+
+        result = bookService.getAllBooks("year", "asc", 0, 1);
 
         assertEquals(1, result.size());
         assertEquals(bookDto2, result.get(0));

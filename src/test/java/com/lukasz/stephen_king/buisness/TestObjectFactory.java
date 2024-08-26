@@ -2,11 +2,36 @@ package com.lukasz.stephen_king.buisness;
 
 import com.lukasz.stephen_king.api.dto.BookDto;
 import com.lukasz.stephen_king.domain.BookDomain;
+import com.lukasz.stephen_king.domain.VillainDomain;
 import com.lukasz.stephen_king.infrastructure.book.Book;
+import com.lukasz.stephen_king.infrastructure.book.Villain;
+import com.lukasz.stephen_king.infrastructure.book.VillainReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TestObjectFactory {
+
+    public static VillainReference createVillainReference1 = VillainReference.builder()
+            .villainId(1)
+            .name("Pennywise")
+            .url("http://localhost:8080/villains/1")
+            .build();
+
+    public static VillainDomain createVillainDomain1 = VillainDomain.builder()
+            .villainId(1)
+            .name("Pennywise")
+            .gender("Unknown")
+            .status("Active")
+            .build();
+
+    public static Villain createVillain1 = Villain.builder()
+            .villainId(1)
+            .name("Pennywise")
+            .gender("Unknown")
+            .status("Active")
+            .notes(new ArrayList<>(List.of("Shape-shifter", "Preys on children")))
+            .build();
 
     public static Book createBook1 = Book.builder()
             .bookId(1)
@@ -15,7 +40,7 @@ public abstract class TestObjectFactory {
             .publisher("Viking")
             .ISBN("978-0450411434")
             .pages(1138)
-            .referenceList(List.of())
+            .referenceList(List.of(createVillainReference1))
             .build();
 
 
@@ -39,7 +64,7 @@ public abstract class TestObjectFactory {
             .pages(1138)
             .description("A horror novel by Stephen King.")
             .image(null)
-            .villains(List.of())
+            .villains(List.of(createVillainDomain1))
             .build();
 
 
@@ -65,7 +90,7 @@ public abstract class TestObjectFactory {
             .pages(1138)
             .description("A horror novel by Stephen King.")
             .image(null)
-            .villains(List.of())
+            .villains(List.of(createVillain1))
             .build();
 
 
@@ -216,6 +241,8 @@ public abstract class TestObjectFactory {
             .image(null)
             .villains(List.of())
             .build();
+
+
 
 }
 

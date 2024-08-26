@@ -4,8 +4,12 @@ import com.lukasz.stephen_king.api.dto.BookDto;
 import com.lukasz.stephen_king.api.dto.mapper.BookDtoMapper;
 import com.lukasz.stephen_king.buisness.dao.BookDao;
 import com.lukasz.stephen_king.buisness.mapper.BookMapper;
+import com.lukasz.stephen_king.buisness.mapper.VillainMapper;
 import com.lukasz.stephen_king.domain.BookDomain;
+import com.lukasz.stephen_king.domain.VillainDomain;
+import com.lukasz.stephen_king.domain.exception.NotFoundException;
 import com.lukasz.stephen_king.infrastructure.book.Book;
+import com.lukasz.stephen_king.infrastructure.book.Villain;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,9 +17,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +33,9 @@ public class BookServiceTest {
 
     @Mock
     private BookDtoMapper bookDtoMapper;
+
+    @Mock
+    private VillainMapper villainMapper;
 
     @InjectMocks
     private BookService bookService;
@@ -193,6 +200,25 @@ public class BookServiceTest {
         List<BookDto> searchResult = bookService.findBooks("tower", "title", "asc", 0, 10);
         assertEquals(2, searchResult.size());
         assertTrue(searchResult.containsAll(List.of(bookDto5, bookDto6)));
+    }
+
+    @Test
+    public void shouldReturnBookByIdCorrectly() {
+        Book book1 = TestObjectFactory.createBook1;
+        BookDomain bookDomain1 = TestObjectFactory.createBookDomain1;
+        BookDto bookDto1 = TestObjectFactory.createBookDto1;
+        Villain villain1 = TestObjectFactory.createVillain1;
+        VillainDomain villainDomain1 = TestObjectFactory.createVillainDomain1;
+
+        when(bookDao.getBook(1)).thenReturn(Optional.of(book1));
+        when(bookMapper.map(book1)).thenReturn(bookDomain1);
+        when(bookDtoMapper.mapToDto(bookDomain1)).thenReturn(bookDto1);
+        when(bookDao.getVillain(1)).thenReturn(villain1);
+        when(villainMapper.mapToDomain(villain1)).thenReturn(villainDomain1);
+
+        BookDto result = bookService.getBook(1);
+
+        assertEquals(bookDto1, result);
     }
 
 }

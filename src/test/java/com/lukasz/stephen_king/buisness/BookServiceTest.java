@@ -221,4 +221,17 @@ public class BookServiceTest {
         assertEquals(bookDto1, result);
     }
 
+    @Test
+    public void shouldThrowNotFoundExceptionWhenBookNotFound() {
+        int bookId = 999;
+
+        when(bookDao.getBook(bookId)).thenReturn(Optional.empty());
+
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
+            bookService.getBook(bookId);
+        });
+
+        assertEquals("Cannot find book with id: [999]", exception.getMessage());
+    }
+
 }

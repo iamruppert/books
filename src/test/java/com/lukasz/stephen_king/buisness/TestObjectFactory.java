@@ -80,5 +80,142 @@ public abstract class TestObjectFactory {
             .image(null)
             .villains(List.of())
             .build();
+
+    public static Book createBook3 = Book.builder()
+            .bookId(3)
+            .year(1975)
+            .title("Salem's Lot")
+            .publisher("Doubleday")
+            .ISBN("978-0385121675")
+            .pages(439)
+            .referenceList(List.of())
+            .build();
+
+    public static BookDomain createBookDomain3 = BookDomain.builder()
+            .bookId(3)
+            .year(1975)
+            .title("Salem's Lot")
+            .publisher("Doubleday")
+            .ISBN("978-0385121675")
+            .pages(439)
+            .description("A horror novel by Stephen King.")
+            .image(null)
+            .villains(List.of())
+            .build();
+
+    public static BookDto createBookDto3 = BookDto.builder()
+            .bookId(3)
+            .year(1975)
+            .title("Salem's Lot")
+            .publisher("Doubleday")
+            .ISBN("978-0385121675")
+            .pages(439)
+            .description("A horror novel by Stephen King.")
+            .image(null)
+            .villains(List.of())
+            .build();
+
+    public static Book createBook4 = Book.builder()
+            .bookId(4)
+            .year(1983)
+            .title("Pet Sematary")
+            .publisher("Doubleday")
+            .ISBN("978-0385121675")
+            .pages(374)
+            .referenceList(List.of())
+            .build();
+
+    public static BookDomain createBookDomain4 = BookDomain.builder()
+            .bookId(4)
+            .year(1983)
+            .title("Pet Sematary")
+            .publisher("Doubleday")
+            .ISBN("978-0385121675")
+            .pages(374)
+            .description("A horror novel by Stephen King.")
+            .image(null)
+            .villains(List.of())
+            .build();
+
+    public static BookDto createBookDto4 = BookDto.builder()
+            .bookId(4)
+            .year(1983)
+            .title("Pet Sematary")
+            .publisher("Doubleday")
+            .ISBN("978-0385121675")
+            .pages(374)
+            .description("A horror novel by Stephen King.")
+            .image(null)
+            .villains(List.of())
+            .build();
+
+    public static Book createBook5 = Book.builder()
+            .bookId(5)
+            .year(1982)
+            .title("The Dark Tower: The Gunslinger")
+            .publisher("Grant")
+            .ISBN("978-0937986509")
+            .pages(224)
+            .referenceList(List.of())
+            .build();
+
+    public static Book createBook6 = Book.builder()
+            .bookId(6)
+            .year(1987)
+            .title("The Dark Tower II: The Drawing of the Three")
+            .publisher("Grant")
+            .ISBN("978-0937986523")
+            .pages(400)
+            .referenceList(List.of())
+            .build();
+
+    public static BookDomain createBookDomain5 = BookDomain.builder()
+            .bookId(5)
+            .year(1982)
+            .title("The Dark Tower: The Gunslinger")
+            .publisher("Grant")
+            .ISBN("978-0937986509")
+            .pages(224)
+            .description("The first novel in Stephen King's The Dark Tower series.")
+            .image(null)
+            .villains(List.of())
+            .build();
+
+    public static BookDomain createBookDomain6 = BookDomain.builder()
+            .bookId(6)
+            .year(1987)
+            .title("The Dark Tower II: The Drawing of the Three")
+            .publisher("Grant")
+            .ISBN("978-0937986523")
+            .pages(400)
+            .description("The second novel in Stephen King's The Dark Tower series.")
+            .image(null)
+            .villains(List.of())
+            .build();
+
+    public static BookDto createBookDto5 = BookDto.builder()
+            .bookId(5)
+            .year(1982)
+            .title("The Dark Tower: The Gunslinger")
+            .publisher("Grant")
+            .ISBN("978-0937986509")
+            .pages(224)
+            .description("The first novel in Stephen King's The Dark Tower series.")
+            .image(null)
+            .villains(List.of())
+            .build();
+
+    public static BookDto createBookDto6 = BookDto.builder()
+            .bookId(6)
+            .year(1987)
+            .title("The Dark Tower II: The Drawing of the Three")
+            .publisher("Grant")
+            .ISBN("978-0937986523")
+            .pages(400)
+            .description("The second novel in Stephen King's The Dark Tower series.")
+            .image(null)
+            .villains(List.of())
+            .build();
+
 }
 

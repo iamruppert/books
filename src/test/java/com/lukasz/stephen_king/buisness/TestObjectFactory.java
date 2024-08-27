@@ -1,11 +1,14 @@
 package com.lukasz.stephen_king.buisness;
 
 import com.lukasz.stephen_king.api.dto.BookDto;
+import com.lukasz.stephen_king.api.dto.MovieDto;
 import com.lukasz.stephen_king.domain.BookDomain;
+import com.lukasz.stephen_king.domain.MovieDomain;
 import com.lukasz.stephen_king.domain.VillainDomain;
 import com.lukasz.stephen_king.infrastructure.book.Book;
 import com.lukasz.stephen_king.infrastructure.book.Villain;
 import com.lukasz.stephen_king.infrastructure.book.VillainReference;
+import com.lukasz.stephen_king.infrastructure.movie.Movie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -242,7 +245,35 @@ public abstract class TestObjectFactory {
             .villains(List.of())
             .build();
 
+    public static Movie createMovie1 = Movie.builder()
+            .id(1)
+            .originalTitle("The Shining")
+            .build();
 
+    public static Movie createMovie2 = Movie.builder()
+            .id(2)
+            .originalTitle("It")
+            .build();
+
+    public static MovieDomain createMovieDomain1 = MovieDomain.builder()
+            .id(1)
+            .originalTitle("The Shining")
+            .build();
+
+    public static MovieDomain createMovieDomain2 = MovieDomain.builder()
+            .id(2)
+            .originalTitle("It")
+            .build();
+
+    public static MovieDto createMovieDto1 = MovieDto.builder()
+            .id(1)
+            .originalTitle("The Shining")
+            .build();
+
+    public static MovieDto createMovieDto2 = MovieDto.builder()
+            .id(2)
+            .originalTitle("It")
+            .build();
 
 }
 

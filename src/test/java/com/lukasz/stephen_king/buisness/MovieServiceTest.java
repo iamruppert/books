@@ -9,6 +9,7 @@ import com.lukasz.stephen_king.buisness.mapper.MovieMapper;
 import com.lukasz.stephen_king.domain.CastMemberDomain;
 import com.lukasz.stephen_king.domain.MovieDetailsDomain;
 import com.lukasz.stephen_king.domain.MovieDomain;
+import com.lukasz.stephen_king.domain.exception.NotFoundException;
 import com.lukasz.stephen_king.infrastructure.movie.CastMember;
 import com.lukasz.stephen_king.infrastructure.movie.Movie;
 import com.lukasz.stephen_king.infrastructure.movie.MovieDetails;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -101,5 +103,17 @@ public class MovieServiceTest {
         assertEquals(2, result.getCast().size());
 
   }
+
+    @Test
+    public void shouldThrowNotFoundExceptionWhenMovieNotFound() {
+
+        int movieId = 999;
+
+        when(movieDao.getMovieDetails(movieId)).thenReturn(Optional.empty());
+
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> movieService.getMovieDetails(movieId));
+
+        assertEquals("Cannot find movie with id: [999]", exception.getMessage());
+    }
 
 }

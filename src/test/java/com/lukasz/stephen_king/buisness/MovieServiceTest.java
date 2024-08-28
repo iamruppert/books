@@ -1,18 +1,26 @@
 package com.lukasz.stephen_king.buisness;
 
+import com.lukasz.stephen_king.api.dto.MovieDetailsDto;
 import com.lukasz.stephen_king.api.dto.MovieDto;
 import com.lukasz.stephen_king.api.dto.mapper.MovieDtoMapper;
 import com.lukasz.stephen_king.buisness.dao.MovieDao;
+import com.lukasz.stephen_king.buisness.mapper.CastMemberMapper;
 import com.lukasz.stephen_king.buisness.mapper.MovieMapper;
+import com.lukasz.stephen_king.domain.CastMemberDomain;
+import com.lukasz.stephen_king.domain.MovieDetailsDomain;
 import com.lukasz.stephen_king.domain.MovieDomain;
+import com.lukasz.stephen_king.infrastructure.movie.CastMember;
 import com.lukasz.stephen_king.infrastructure.movie.Movie;
+import com.lukasz.stephen_king.infrastructure.movie.MovieDetails;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -28,6 +36,9 @@ public class MovieServiceTest {
 
     @Mock
     private MovieDtoMapper movieDtoMapper;
+
+    @Mock
+    private CastMemberMapper castMemberMapper;
 
     @InjectMocks
     private MovieService movieService;
@@ -59,5 +70,36 @@ public class MovieServiceTest {
 
         assertEquals(2, result.size());
     }
+
+    @Test
+    public void shouldReturnMovieDetails() {
+
+        int movieId = 694;
+        MovieDetails movieDetails = TestObjectFactory.movieDetails1;
+        ArrayList<CastMember> castMembers = new ArrayList<>();
+        castMembers.add(TestObjectFactory.castMember1);
+        castMembers.add(TestObjectFactory.castMember2);
+
+        MovieDetailsDomain movieDetailsDomain = TestObjectFactory.movieDetailsDomain1;
+        ArrayList<CastMemberDomain> castMemberDomains = new ArrayList<>();
+        castMemberDomains.add(TestObjectFactory.castMemberDomain1);
+        castMemberDomains.add(TestObjectFactory.castMemberDomain2);
+        movieDetailsDomain.setCast(castMemberDomains);
+
+        MovieDetailsDto movieDetailsDto = TestObjectFactory.movieDetailsDto1;
+
+        when(movieDao.getMovieDetails(movieId)).thenReturn(Optional.of(movieDetails));
+        when(movieDao.getMovieCast(movieId)).thenReturn(Optional.of(castMembers));
+        when(movieMapper.mapToDomain(movieDetails)).thenReturn(movieDetailsDomain);
+        when(castMemberMapper.mapToDomain(castMembers.get(0))).thenReturn(castMemberDomains.get(0));
+        when(castMemberMapper.mapToDomain(castMembers.get(1))).thenReturn(castMemberDomains.get(1));
+        when(movieDtoMapper.mapToDto(movieDetailsDomain)).thenReturn(movieDetailsDto);
+
+        MovieDetailsDto result = movieService.getMovieDetails(movieId);
+
+        assertEquals(movieDetailsDto, result);
+        assertEquals(2, result.getCast().size());
+
+  }
 
 }

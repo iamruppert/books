@@ -1,14 +1,15 @@
 package com.lukasz.stephen_king.buisness;
 
 import com.lukasz.stephen_king.api.dto.BookDto;
+import com.lukasz.stephen_king.api.dto.MovieDetailsDto;
 import com.lukasz.stephen_king.api.dto.MovieDto;
-import com.lukasz.stephen_king.domain.BookDomain;
-import com.lukasz.stephen_king.domain.MovieDomain;
-import com.lukasz.stephen_king.domain.VillainDomain;
+import com.lukasz.stephen_king.domain.*;
 import com.lukasz.stephen_king.infrastructure.book.Book;
 import com.lukasz.stephen_king.infrastructure.book.Villain;
 import com.lukasz.stephen_king.infrastructure.book.VillainReference;
+import com.lukasz.stephen_king.infrastructure.movie.CastMember;
 import com.lukasz.stephen_king.infrastructure.movie.Movie;
+import com.lukasz.stephen_king.infrastructure.movie.MovieDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -273,6 +274,76 @@ public abstract class TestObjectFactory {
     public static MovieDto createMovieDto2 = MovieDto.builder()
             .id(2)
             .originalTitle("It")
+            .build();
+
+    public static MovieDetails movieDetails1 = MovieDetails.builder()
+            .id(694)
+            .imdbId("tt0081505")
+            .backdropPath("/mmd1HnuvAzFc4iuVJcnBrhDNEKr.jpg")
+            .budget(19000000)
+            .originalLanguage("en")
+            .originalTitle("The Shining")
+            .overview("Jack Torrance accepts a caretaker job at the Overlook Hotel, where he, along with his wife Wendy and their son Danny, must live isolated from the rest of the world for the winter. But they aren't prepared for the madness that lurks within.")
+            .posterPath("/xazWoLealQwEgqZ89MLZklLZD3k.jpg")
+            .releaseDate("1980-05-23")
+            .runtime(144)
+            .voteAverage(8.214)
+            .build();
+
+    public static CastMember castMember1 = CastMember.builder()
+            .castMemberId(514)
+            .name("Jack Nicholson")
+            .character("Jack Torrance")
+            .build();
+
+    public static CastMember castMember2 = CastMember.builder()
+            .castMemberId(10409)
+            .name("Shelley Duvall")
+            .character("Wendy Torrance")
+            .build();
+
+    public static CastMemberDomain castMemberDomain1 = CastMemberDomain.builder()
+            .castMemberId(514)
+            .name("Jack Nicholson")
+            .character("Jack Torrance")
+            .build();
+
+    public static CastMemberDomain castMemberDomain2 = CastMemberDomain.builder()
+            .castMemberId(10409)
+            .name("Shelley Duvall")
+            .character("Wendy Torrance")
+            .build();
+
+    public static MovieDetailsDomain movieDetailsDomain1 = MovieDetailsDomain.builder()
+            .id(694)
+            .imdbId("tt0081505")
+            .backdropPath("/mmd1HnuvAzFc4iuVJcnBrhDNEKr.jpg")
+            .budget(19000000)
+            .originalLanguage("en")
+            .originalTitle("The Shining")
+            .overview("Jack Torrance accepts a caretaker job at the Overlook Hotel, where he, along with his wife Wendy and their son Danny, must live isolated from the rest of the world for the winter. But they aren't prepared for the madness that lurks within.")
+            .posterPath("/xazWoLealQwEgqZ89MLZklLZD3k.jpg")
+            .releaseDate("1980-05-23")
+            .runtime(144)
+            .voteAverage(8.214)
+            .cast(new ArrayList<>(List.of(castMemberDomain1, castMemberDomain2)))
+            .build();
+
+
+
+    public static MovieDetailsDto movieDetailsDto1 = MovieDetailsDto.builder()
+            .id(694)
+            .imdbId("tt0081505")
+            .backdropPath("/mmd1HnuvAzFc4iuVJcnBrhDNEKr.jpg")
+            .budget(19000000)
+            .originalLanguage("en")
+            .originalTitle("The Shining")
+            .overview("Jack Torrance accepts a caretaker job at the Overlook Hotel, where he, along with his wife Wendy and their son Danny, must live isolated from the rest of the world for the winter. But they aren't prepared for the madness that lurks within.")
+            .posterPath("/xazWoLealQwEgqZ89MLZklLZD3k.jpg")
+            .releaseDate("1980-05-23")
+            .runtime(144)
+            .voteAverage(8.214)
+            .cast(new ArrayList<>(List.of(castMemberDomain1, castMemberDomain2)))
             .build();
 
 }
